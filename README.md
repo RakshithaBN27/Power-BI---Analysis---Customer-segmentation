@@ -65,11 +65,11 @@ Histogram.png
 
 ### Regression Analysis
 
-Regression analysis.png
+![Regressionnalysis.png
 
 ### Customer Segments
 
-Customer Segments.png
+![Customer Segments](
 
 ## Repository Contents
 
