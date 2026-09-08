@@ -53,15 +53,23 @@ The objective of this project is to identify customer segments, understand purch
 
 ### Dashboard Overview
 
-(Add screenshot here)
+Dashboard.png
 
 ### Heat Map
 
-(Add screenshot here)
+Heat map.png
+
+### Histogram
+
+Histogram.png
 
 ### Regression Analysis
 
-(Add screenshot here)
+Regression analysis.png
+
+### Customer Segments
+
+Customer Segments.png
 
 ## Repository Contents
 
