@@ -52,24 +52,19 @@ The objective of this project is to identify customer segments, understand purch
 ## Dashboard Screenshots
 
 ### Dashboard Overview
-
-Dashboard.png
+![Dashboard Overview](./Dashboard.png)
 
 ### Heat Map
-
-Heat map.png
+![Heat Map](./Heat%20map.png)
 
 ### Histogram
-
-Histogram.png
+![Histogram](./Histogram.png)
 
 ### Regression Analysis
-
-![Regressionnalysis.png
+![Regression Analysis](./Regression%20analysis.png)
 
 ### Customer Segments
-
-![Customer Segments](
+![Customer Segments](./Customer%20Segments.png)
 
 ## Repository Contents
 
