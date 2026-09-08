@@ -1,0 +1,51 @@
+table 'Incomes by State'
+	lineageTag: 38f7772c-c1df-4f04-bed1-955447af4c57
+
+	column Label
+		dataType: string
+		lineageTag: 15ebc66e-5bb9-437c-bf9d-61538f375cda
+		summarizeBy: none
+		sourceColumn: Label
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 8b7a78a2-0af8-42ea-a889-d8826b61521f
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Percentage
+		dataType: double
+		lineageTag: 0c716fc3-27b1-493c-b470-a70f0cc60d80
+		summarizeBy: sum
+		sourceColumn: Percentage
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Estimated Income'
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d1322cc-3d3c-42a0-9bcf-b5f4ba61e0d5
+		summarizeBy: sum
+		sourceColumn: Estimated Income
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Incomes by State' = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\census-data.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Incomes by State", Kind = "Sheet"]}[Data],
+				  #"Promoted headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Label", type text}, {"State", type text}, {"Percentage", type number}, {"Estimated Income", Int64.Type}}, "en-US")
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

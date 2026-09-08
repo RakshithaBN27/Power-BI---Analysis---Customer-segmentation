@@ -1,0 +1,126 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 254,
+            "y": 31.412427159433491
+          },
+          "nodeIndex": "Customer List",
+          "nodeLineageTag": "e8518071-5b46-4dfc-a940-4803bf131095",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 367.78575304898936
+          },
+          "nodeIndex": "Product Inventory",
+          "nodeLineageTag": "9006c8d6-747d-413b-983d-c515329a7056",
+          "size": {
+            "height": 224,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 743.18475118063,
+            "y": 472.21737625454477
+          },
+          "nodeIndex": "Avg Income by State",
+          "nodeLineageTag": "dda534df-3b8c-45cf-9acc-ebd8049b92b8",
+          "size": {
+            "height": 128,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 923.36163941535983,
+            "y": 2.5423688869802845
+          },
+          "nodeIndex": "Incomes by State",
+          "nodeLineageTag": "38f7772c-c1df-4f04-bed1-955447af4c57",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 992,
+            "y": 260.41242715943349
+          },
+          "nodeIndex": "Industries",
+          "nodeLineageTag": "bd7a6967-04d6-4b43-a18f-50df43c002e0",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 561.75362854763557,
+            "y": 293.79339969805682
+          },
+          "nodeIndex": "State_List",
+          "nodeLineageTag": "951121ee-369a-4945-9e12-7f7e47f0926e",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 149.41242715943349
+          },
+          "nodeIndex": "Purchase data",
+          "nodeLineageTag": "7c5db0c8-bd39-4255-b8b5-ffcdb362f135",
+          "size": {
+            "height": 152,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 300.74146211068478,
+            "y": 415.31293150699321
+          },
+          "nodeIndex": "Regression Table",
+          "nodeLineageTag": "20e49d1c-8a68-4e10-a1df-ebb7274ab68b",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 70.955543900968848,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

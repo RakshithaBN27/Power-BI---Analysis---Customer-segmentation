@@ -1,0 +1,130 @@
+table 'Regression Table'
+	lineageTag: 20e49d1c-8a68-4e10-a1df-ebb7274ab68b
+
+	measure n = COUNTROWS('Regression Table')
+		formatString: 0.00000
+		lineageTag: 8718ed53-032f-4b91-a871-da5153a90534
+
+	measure sum_x = sum('Regression Table'[x])
+		lineageTag: 11d40d8a-7393-4480-ab8e-be91e0e49c00
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure sum_y = sum('Regression Table'[y])
+		lineageTag: 9c0ff57d-ace0-47b4-81f5-f37af535dda6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'sum x^2' = sum('Regression Table'[X^2])
+		lineageTag: 7570f746-f5df-4986-b598-05e0e8e9b951
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'sum y^2' = sum('Regression Table'[Y^2])
+		lineageTag: 94e6287e-a897-4dc1-8209-9a7c292a1728
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure sum_xy = sum('Regression Table'[XY])
+		lineageTag: 47f4f471-0b29-4986-87c8-d58fe6461d0e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure b = DIVIDE([sum_y]*[sum x^2]-[sum_x]*[sum_xy],[n]*[sum x^2]-[sum_x]^2)
+		formatString: 0.000000
+		lineageTag: 1c814f7d-b7b7-4774-9318-0cddd82f6c5f
+
+	measure m = DIVIDE([n]*[sum_xy]-[sum_x]*[sum_y],[n]*[sum x^2]-[sum_x]^2)
+		formatString: 0.000000
+		lineageTag: 76639e20-d90d-49a2-9763-ab9a03aea2f3
+
+	measure 'Test Regression' =
+			
+			[m] * 100 + [b]
+		lineageTag: 4093b1bd-8b89-47d2-8c50-345031cc3384
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure R² =
+			
+			POWER([R], 2)
+		lineageTag: 5ff9f280-1db6-45ad-8ed5-af643e391dc0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Regression Formula' =
+			
+			"y = "
+			& FORMAT([m],"0.0000")
+			& "x - "
+			& FORMAT(ABS([b]),"0.00")
+		lineageTag: 02abeeef-f06f-4158-a337-a4057c82f381
+
+	column State
+		lineageTag: adf41871-f477-4f8f-8e05-2c19315736b4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: Customer List[State]
+
+		annotation SummarizationSetBy = Automatic
+
+	column x =
+			
+			LOOKUPVALUE(
+			    'Avg Income by State'[Average Income],
+			    'Avg Income by State'[State],
+			    'Regression Table'[State]
+			)
+		formatString: 0.00000
+		lineageTag: 48ab4da6-cd71-459c-9ec6-459702e9d4ac
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column y =
+			
+			CALCULATE(
+			    AVERAGE('Customer List'[Last 6 Months Purchases]),
+			    FILTER(
+			        'Customer List',
+			        'Customer List'[State] = 'Regression Table'[State]
+			    )
+			)
+		formatString: 0.00000
+		lineageTag: 35608940-ee9b-4aae-83c8-4eb18fd158df
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column X^2 = [x]^2
+		formatString: 0.00
+		lineageTag: fa1b5a70-b8fa-4ec2-a839-8f3326ef6d45
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Y^2 = [y]^2
+		formatString: 0.00
+		lineageTag: 693da6e2-a9ab-479e-aefd-b8a42e8b356c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column XY = [x]*[y]
+		formatString: 0.00
+		lineageTag: 0bb83325-4c75-4083-8222-09d1071d6bbb
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Regression Table' = calculated
+		mode: import
+		source =
+				
+				SUMMARIZE(
+				    'Customer List',
+				    'Customer List'[State]
+				)
+
+	annotation PBI_Id = f110276a18df4761b69353da6d941c32
+

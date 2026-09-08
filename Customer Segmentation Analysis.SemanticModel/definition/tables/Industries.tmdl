@@ -1,0 +1,41 @@
+table Industries
+	lineageTag: bd7a6967-04d6-4b43-a18f-50df43c002e0
+
+	column Industry
+		dataType: string
+		lineageTag: f0eb7c7a-535c-4316-a493-8f93ad4e1e7d
+		summarizeBy: none
+		sourceColumn: Industry
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: c69ea629-b81e-4137-8d8c-e88ef00b0bc2
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column Population
+		dataType: int64
+		formatString: 0
+		lineageTag: 3dbaeaed-4360-4620-808c-e8be9a98ffa1
+		summarizeBy: sum
+		sourceColumn: Population
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Industries = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\census-data.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Industries", Kind = "Sheet"]}[Data],
+				  #"Promoted headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Industry", type text}, {"State", type text}, {"Population", Int64.Type}}, "en-US")
+				in
+				  #"Changed column type"
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,118 @@
+table 'Avg Income by State'
+	lineageTag: dda534df-3b8c-45cf-9acc-ebd8049b92b8
+
+	measure 'Final Formula' = "Y=" & ROUND([m],2) & "X+" & ROUND([b],2)
+		lineageTag: ffc4c8c0-5b6c-4690-b23c-376aaecde295
+
+	measure R =
+			
+			DIVIDE(
+			    [n] * [sum_xy] - [sum_x] * [sum_y],
+			    SQRT(
+			        ([n] * [sum x^2] - [sum_x]^2) *
+			        ([n] * [sum y^2] - [sum_y]^2)
+			    )
+			)
+		lineageTag: d8408bc0-b19e-4366-8f59-91f4c8d428e3
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average of Average Income and Average of Last 6 Months Purchases correlation for State' =
+			
+			VAR __CORRELATION_TABLE = VALUES('Avg Income by State'[State])
+			VAR __COUNT =
+				COUNTX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(
+						AVERAGE('Avg Income by State'[Average Income])
+							* AVERAGE('Customer List'[Last 6 Months Purchases])
+					)
+				)
+			VAR __SUM_X =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(AVERAGE('Avg Income by State'[Average Income]))
+				)
+			VAR __SUM_Y =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(AVERAGE('Customer List'[Last 6 Months Purchases]))
+				)
+			VAR __SUM_XY =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(
+						AVERAGE('Avg Income by State'[Average Income])
+							* AVERAGE('Customer List'[Last 6 Months Purchases]) * 1.
+					)
+				)
+			VAR __SUM_X2 =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(AVERAGE('Avg Income by State'[Average Income]) ^ 2)
+				)
+			VAR __SUM_Y2 =
+				SUMX(
+					KEEPFILTERS(__CORRELATION_TABLE),
+					CALCULATE(AVERAGE('Customer List'[Last 6 Months Purchases]) ^ 2)
+				)
+			RETURN
+				DIVIDE(
+					__COUNT * __SUM_XY - __SUM_X * __SUM_Y * 1.,
+					SQRT(
+						(__COUNT * __SUM_X2 - __SUM_X ^ 2)
+							* (__COUNT * __SUM_Y2 - __SUM_Y ^ 2)
+					)
+				)
+		lineageTag: 65109fbc-9cb7-48a4-bd56-6788a9ead3b8
+
+		extendedProperty MeasureTemplate =
+				{
+				  "version": 0,
+				  "daxTemplateName": "CorrelationCoefficient"
+				}
+
+		changedProperty = FormatString
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column State
+		dataType: string
+		lineageTag: abac3e71-8ecd-4e15-a3b9-b3147858b7ef
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Average Income'
+		dataType: double
+		formatString: 0.00
+		lineageTag: 38ff14a1-6082-4e54-b8e0-f547ae041bf3
+		summarizeBy: sum
+		sourceColumn: Average Income
+
+		annotation SummarizationSetBy = Automatic
+
+	column X^2 = ```
+			[Average Income]^2 
+			```
+		formatString: 0.00
+		lineageTag: cabd44ea-6450-4870-b70d-4ec019ff20a5
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Avg Income by State' = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\census-data.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Avg Income by State", Kind = "Sheet"]}[Data],
+				  #"Promoted headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"State", type text}, {"Average Income", type number}}, "en-US"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed column type",{{"Average Income", "Average Income"}})
+				in
+				  #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+

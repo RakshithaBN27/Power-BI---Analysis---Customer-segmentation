@@ -1,0 +1,29 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-IN
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["Customer List","Product Inventory","Purchase data","Incomes by State","Avg Income by State","Industries","State_List"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table 'Customer List'
+ref table DateTableTemplate_1f249000-626f-461d-af7d-cf9658723ae9
+ref table LocalDateTable_4327e635-9ec3-4964-b41e-270c1959a663
+ref table 'Product Inventory'
+ref table 'Purchase data'
+ref table LocalDateTable_12f330da-1091-456d-912b-66aa3267173f
+ref table 'Incomes by State'
+ref table 'Avg Income by State'
+ref table Industries
+ref table State_List
+ref table 'Regression Table'
+
+ref cultureInfo en-US
+

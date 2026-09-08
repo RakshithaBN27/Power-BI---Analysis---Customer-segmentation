@@ -1,0 +1,135 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "faf85288c0dfbae68b93",
+  "position": {
+    "x": 261.62864969979131,
+    "y": 266.86122269378717,
+    "z": 0,
+    "height": 790,
+    "width": 696.66666666666674,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "scatterChart",
+    "query": {
+      "queryState": {
+        "Series": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Customer List"
+                    }
+                  },
+                  "Property": "State"
+                }
+              },
+              "queryRef": "Customer List.State",
+              "nativeQueryRef": "State"
+            }
+          ]
+        },
+        "X": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Avg Income by State"
+                        }
+                      },
+                      "Property": "Average Income"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(Avg Income by State.Average Income)",
+              "nativeQueryRef": "Average of Average Income",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Customer List"
+                        }
+                      },
+                      "Property": "Last 6 Months Purchases"
+                    }
+                  },
+                  "Function": 1
+                }
+              },
+              "queryRef": "Sum(Customer List.Last 6 Months Purchases)",
+              "nativeQueryRef": "Average of Last 6 Months Purchases"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "trend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "displayName": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Trend line 1'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Regression Analysis: Income and Customer Purchases'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTitle": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

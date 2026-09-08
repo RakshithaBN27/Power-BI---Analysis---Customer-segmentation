@@ -1,0 +1,167 @@
+table 'Customer List'
+	lineageTag: e8518071-5b46-4dfc-a940-4803bf131095
+
+	measure 'count of Cousromer ID' = count('Customer List'[Customer ID])
+		formatString: 0
+		lineageTag: 397fa6f4-2981-429d-92f2-71c39aefb178
+
+	measure 'Leather Bag Customers' =
+			
+			CALCULATE(
+			    COUNTROWS('Customer List'),
+			    'Customer List'[Recommended Product] = "Leather Bag ($1000)"
+			)
+		formatString: 0
+		lineageTag: 9f0724bc-22c1-4162-9b33-3888e8a320ad
+
+	measure 'Avg Predicted Income' =
+			
+			AVERAGE('Customer List'[Predicted Income])
+		lineageTag: 3be415ea-da2c-46a2-881f-615574a73e6a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 3ff4dd3d-310b-4bb4-b18a-715c11769c2f
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'First Name'
+		dataType: string
+		lineageTag: 324b57f7-5933-4718-8be3-93096404793a
+		summarizeBy: none
+		sourceColumn: First Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Last Name'
+		dataType: string
+		lineageTag: 553592b5-2cb4-4b6a-9e13-40bb61045d27
+		summarizeBy: none
+		sourceColumn: Last Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: 1521729d-7b73-4b97-80c9-d4249a0b6e72
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Date of Birth'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 04c6921a-004b-49e6-aa67-77659ee29c1a
+		summarizeBy: none
+		sourceColumn: Date of Birth
+
+		variation Variation
+			isDefault
+			relationship: d6432962-32eb-497f-9a4c-cc1d6ac9537c
+			defaultHierarchy: LocalDateTable_4327e635-9ec3-4964-b41e-270c1959a663.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Last 6 Months Purchases'
+		dataType: double
+		lineageTag: cb085301-a5a3-4726-9102-21cbed6344d4
+		summarizeBy: sum
+		sourceColumn: Last 6 Months Purchases
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Predicted Income' =
+			
+			(
+			    'Customer List'[Last 6 Months Purchases]
+			    + 722.141641
+			)
+			/
+			0.010726
+		lineageTag: cf62942a-976b-44ef-8170-53a23de600e2
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Income Category' =
+			
+			SWITCH(
+			    TRUE(),
+			    'Customer List'[Predicted Income] < 70000, "Below 70K",
+			    'Customer List'[Predicted Income] < 80000, "70K-80K",
+			    'Customer List'[Predicted Income] < 90000, "80K-90K",
+			    'Customer List'[Predicted Income] < 100000, "90K-100K",
+			    'Customer List'[Predicted Income] < 110000, "100K-110K",
+			    "110K+"
+			)
+		lineageTag: 453f3f1f-e0e9-4031-bfd0-a0c8c178c7d8
+		summarizeBy: none
+		sortByColumn: 'Income Sort'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Income Sort' =
+			
+			SWITCH(
+			    TRUE(),
+			    'Customer List'[Predicted Income] < 70000, 0,
+			    'Customer List'[Predicted Income] < 80000, 1,
+			    'Customer List'[Predicted Income] < 90000, 2,
+			    'Customer List'[Predicted Income] < 100000, 3,
+			    'Customer List'[Predicted Income] < 110000, 4,
+			    5
+			)
+		formatString: 0
+		lineageTag: 66794aa9-4203-46ea-bcbc-e83f5544cdcc
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Recommended Product' = ```
+			
+			SWITCH(
+			    TRUE(),
+			    
+			    'Customer List'[Predicted Income] < 80000,
+			        "Shirt ($25)",
+			
+			    'Customer List'[Predicted Income] < 100000,
+			        "Sweater ($100)",
+			
+			    "Leather Bag ($1000)"
+			)
+			```
+		lineageTag: 0d8af20b-f7db-4773-bfa5-ed0c7c5e5f2e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Customer List' = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\customer-list.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Customer List", Kind = "Sheet"]}[Data],
+				  #"Promoted headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Customer ID", type text}, {"First Name", type text}, {"Last Name", type text}, {"State", type text}, {"Date of Birth", type date}, {"Last 6 Months Purchases", type number}}, "en-US"),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed column type",{{"Last 6 Months Purchases", "Last 6 Months Purchases"}})
+				in
+				  #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,38 @@
+relationship d6432962-32eb-497f-9a4c-cc1d6ac9537c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Customer List'.'Date of Birth'
+	toColumn: LocalDateTable_4327e635-9ec3-4964-b41e-270c1959a663.Date
+
+relationship a13307fc-90a1-4ea2-aa7e-dde18b756423
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Purchase data'.'Purchase Date'
+	toColumn: LocalDateTable_12f330da-1091-456d-912b-66aa3267173f.Date
+
+relationship AutoDetected_26614c75-fac1-4204-b13c-eeb7f41b073c
+	fromColumn: 'Purchase data'.'Customer ID'
+	toColumn: 'Customer List'.'Customer ID'
+
+relationship AutoDetected_359ffc9e-f710-47ea-b0e4-5e64af930f1b
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: State_List.State
+	toColumn: 'Avg Income by State'.State
+
+relationship b0792b69-cea8-eeca-1cea-c7966141118c
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Incomes by State'.State
+	toColumn: State_List.State
+
+relationship 6eab4af0-3bde-109d-8f98-b2c077d06ca9
+	fromColumn: Industries.State
+	toColumn: State_List.State
+
+relationship 49630af4-6ec4-7a55-03b3-950b9ccadde0
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Customer List'.State
+	toColumn: State_List.State
+
+relationship e12fb508-bb01-fd9d-0f5e-a09964bd5008
+	fromColumn: 'Customer List'.State
+	toColumn: 'Regression Table'.State
+

@@ -1,0 +1,61 @@
+table 'Purchase data'
+	lineageTag: 7c5db0c8-bd39-4255-b8b5-ffcdb362f135
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 7be1bdce-cdb4-449e-88c3-99f6cee6d650
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Purchase Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 39def614-91f4-46dd-907b-57fd737ad2ba
+		summarizeBy: none
+		sourceColumn: Purchase Date
+
+		variation Variation
+			isDefault
+			relationship: a13307fc-90a1-4ea2-aa7e-dde18b756423
+			defaultHierarchy: LocalDateTable_12f330da-1091-456d-912b-66aa3267173f.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Purchase Amount'
+		dataType: decimal
+		formatString: "₹"\ #,0.###############;#,0.###############\ -"₹";"₹"\ #,0.###############
+		lineageTag: 72e31172-0743-4b2b-836e-61aa52f9dfce
+		summarizeBy: sum
+		sourceColumn: Purchase Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-IN"}
+
+	partition 'Purchase data' = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\purchase-list.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Sheet1", Kind = "Sheet"]}[Data],
+				  #"Promoted headers" = Table.PromoteHeaders(#"Navigation 1", [PromoteAllScalars = true]),
+				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"Customer ID", type text}, {"1st September, 2020", type number}, {"2nd September, 2020", Int64.Type}, {"3rd September, 2020", Int64.Type}, {"4th September, 2020", type number}, {"5th September, 2020", Int64.Type}, {"6th September, 2020", Int64.Type}, {"7th September, 2020", Int64.Type}, {"8th September, 2020", type number}, {"9th September, 2020", Int64.Type}, {"10th September, 2020", Int64.Type}, {"11th September, 2020", Int64.Type}, {"12th September, 2020", Int64.Type}, {"13th September, 2020", Int64.Type}, {"14th September, 2020", Int64.Type}, {"15th September, 2020", Int64.Type}, {"16th September, 2020", Int64.Type}, {"17th September, 2020", Int64.Type}, {"18th September, 2020", Int64.Type}, {"19th September, 2020", Int64.Type}, {"20th September, 2020", Int64.Type}, {"21st September, 2020", Int64.Type}, {"22nd September, 2020", Int64.Type}, {"23rd September, 2020", Int64.Type}, {"24th September, 2020", Int64.Type}, {"25th September, 2020", Int64.Type}, {"26th September, 2020", Int64.Type}, {"27th September, 2020", Int64.Type}, {"28th September, 2020", Int64.Type}, {"29th September, 2020", Int64.Type}, {"30th September, 2020", Int64.Type}, {"1st October, 2020", Int64.Type}, {"2nd October, 2020", Int64.Type}, {"3rd October, 2020", Int64.Type}, {"4th October, 2020", Int64.Type}, {"5th October, 2020", Int64.Type}, {"6th October, 2020", Int64.Type}, {"7th October, 2020", Int64.Type}, {"8th October, 2020", Int64.Type}, {"9th October, 2020", Int64.Type}, {"10th October, 2020", Int64.Type}, {"11th October, 2020", Int64.Type}, {"12th October, 2020", Int64.Type}, {"13th October, 2020", Int64.Type}, {"14th October, 2020", Int64.Type}, {"15th October, 2020", Int64.Type}, {"16th October, 2020", Int64.Type}, {"17th October, 2020", Int64.Type}, {"18th October, 2020", Int64.Type}, {"19th October, 2020", Int64.Type}, {"20th October, 2020", Int64.Type}, {"21st October, 2020", Int64.Type}, {"22nd October, 2020", Int64.Type}, {"23rd October, 2020", Int64.Type}, {"24th October, 2020", Int64.Type}, {"25th October, 2020", Int64.Type}, {"26th October, 2020", Int64.Type}, {"27th October, 2020", Int64.Type}, {"28th October, 2020", Int64.Type}, {"29th October, 2020", Int64.Type}, {"30th October, 2020", Int64.Type}, {"31st October, 2020", Int64.Type}, {"1st November, 2020", Int64.Type}, {"2nd November, 2020", Int64.Type}, {"3rd November, 2020", Int64.Type}, {"4th November, 2020", Int64.Type}, {"5th November, 2020", Int64.Type}, {"6th November, 2020", Int64.Type}, {"7th November, 2020", type number}, {"8th November, 2020", Int64.Type}, {"9th November, 2020", Int64.Type}, {"10th November, 2020", Int64.Type}, {"11th November, 2020", Int64.Type}, {"12th November, 2020", Int64.Type}, {"13th November, 2020", Int64.Type}, {"14th November, 2020", Int64.Type}, {"15th November, 2020", Int64.Type}, {"16th November, 2020", Int64.Type}, {"17th November, 2020", Int64.Type}, {"18th November, 2020", Int64.Type}, {"19th November, 2020", Int64.Type}, {"20th November, 2020", Int64.Type}, {"21st November, 2020", type number}, {"22nd November, 2020", Int64.Type}, {"23rd November, 2020", Int64.Type}, {"24th November, 2020", Int64.Type}, {"25th November, 2020", Int64.Type}, {"26th November, 2020", Int64.Type}, {"27th November, 2020", type number}, {"28th November, 2020", type number}, {"29th November, 2020", Int64.Type}, {"30th November, 2020", type number}, {"1st December, 2020", type number}, {"2nd December, 2020", Int64.Type}, {"3rd December, 2020", Int64.Type}, {"4th December, 2020", Int64.Type}, {"5th December, 2020", Int64.Type}, {"6th December, 2020", Int64.Type}, {"7th December, 2020", type number}, {"8th December, 2020", Int64.Type}, {"9th December, 2020", Int64.Type}, {"10th December, 2020", Int64.Type}, {"11th December, 2020", type number}, {"12th December, 2020", Int64.Type}, {"13th December, 2020", Int64.Type}, {"14th December, 2020", Int64.Type}, {"15th December, 2020", Int64.Type}, {"16th December, 2020", Int64.Type}, {"17th December, 2020", Int64.Type}, {"18th December, 2020", Int64.Type}, {"19th December, 2020", type number}, {"20th December, 2020", type number}, {"21st December, 2020", Int64.Type}, {"22nd December, 2020", Int64.Type}, {"23rd December, 2020", Int64.Type}, {"24th December, 2020", Int64.Type}, {"25th December, 2020", Int64.Type}, {"26th December, 2020", Int64.Type}, {"27th December, 2020", Int64.Type}, {"28th December, 2020", Int64.Type}, {"29th December, 2020", Int64.Type}, {"30th December, 2020", Int64.Type}, {"31st December, 2020", Int64.Type}, {"1st January, 2021", Int64.Type}, {"2nd January, 2021", Int64.Type}, {"3rd January, 2021", Int64.Type}, {"4th January, 2021", Int64.Type}, {"5th January, 2021", Int64.Type}, {"6th January, 2021", Int64.Type}, {"7th January, 2021", Int64.Type}, {"8th January, 2021", Int64.Type}, {"9th January, 2021", Int64.Type}, {"10th January, 2021", Int64.Type}, {"11th January, 2021", Int64.Type}, {"12th January, 2021", Int64.Type}, {"13th January, 2021", Int64.Type}, {"14th January, 2021", Int64.Type}, {"15th January, 2021", Int64.Type}, {"16th January, 2021", Int64.Type}, {"17th January, 2021", Int64.Type}, {"18th January, 2021", Int64.Type}, {"19th January, 2021", Int64.Type}, {"20th January, 2021", Int64.Type}, {"21st January, 2021", Int64.Type}, {"22nd January, 2021", Int64.Type}, {"23rd January, 2021", Int64.Type}, {"24th January, 2021", Int64.Type}, {"25th January, 2021", Int64.Type}, {"26th January, 2021", Int64.Type}, {"27th January, 2021", Int64.Type}, {"28th January, 2021", Int64.Type}, {"29th January, 2021", Int64.Type}, {"30th January, 2021", Int64.Type}, {"31st January, 2021", Int64.Type}, {"1st February, 2021", Int64.Type}, {"2nd February, 2021", Int64.Type}, {"3rd February, 2021", Int64.Type}, {"4th February, 2021", Int64.Type}, {"5th February, 2021", Int64.Type}, {"6th February, 2021", Int64.Type}, {"7th February, 2021", Int64.Type}, {"8th February, 2021", Int64.Type}, {"9th February, 2021", Int64.Type}, {"10th February, 2021", Int64.Type}, {"11th February, 2021", Int64.Type}, {"12th February, 2021", Int64.Type}, {"13th February, 2021", Int64.Type}, {"14th February, 2021", Int64.Type}, {"15th February, 2021", Int64.Type}, {"16th February, 2021", Int64.Type}, {"17th February, 2021", Int64.Type}, {"18th February, 2021", Int64.Type}, {"19th February, 2021", Int64.Type}, {"20th February, 2021", Int64.Type}, {"21st February, 2021", Int64.Type}, {"22nd February, 2021", Int64.Type}, {"23rd February, 2021", Int64.Type}, {"24th February, 2021", Int64.Type}, {"25th February, 2021", Int64.Type}, {"26th February, 2021", Int64.Type}, {"27th February, 2021", Int64.Type}, {"28th February, 2021", Int64.Type}, {"1st March, 2021", Int64.Type}}, "en-US"),
+				    #"Unpivoted Other Columns" = Table.UnpivotOtherColumns(#"Changed column type", {"Customer ID"}, "Attribute", "Value"),
+				    #"Replaced Value" = Table.ReplaceValue(#"Unpivoted Other Columns","st","",Replacer.ReplaceText,{"Attribute"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","nd","",Replacer.ReplaceText,{"Attribute"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","rd","",Replacer.ReplaceText,{"Attribute"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","th","",Replacer.ReplaceText,{"Attribute"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Replaced Value3",{{"Attribute", type date}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Attribute", "Purchase Date"}, {"Value", "Purchase Amount"}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Renamed Columns",{{"Purchase Amount", Currency.Type}})
+				in
+				    #"Changed Type1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

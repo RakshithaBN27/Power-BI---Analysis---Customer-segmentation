@@ -1,0 +1,112 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "bfd06c190e865e6f3ab3",
+  "position": {
+    "x": 261.62864969979131,
+    "y": 136.04689784389149,
+    "z": 4000,
+    "height": 104.65145987991653,
+    "width": 1637.7953471206938,
+    "tabOrder": 4000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Regression Table"
+                    }
+                  },
+                  "Property": "Regression Formula"
+                }
+              },
+              "queryRef": "Regression Table.Regression Formula",
+              "nativeQueryRef": "Regression Formula"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Regression Table"
+                    }
+                  },
+                  "Property": "b"
+                }
+              },
+              "queryRef": "Regression Table.b",
+              "nativeQueryRef": "b"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Regression Table"
+                    }
+                  },
+                  "Property": "m"
+                }
+              },
+              "queryRef": "Regression Table.m",
+              "nativeQueryRef": "m"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Regression Table"
+                    }
+                  },
+                  "Property": "Test Regression"
+                }
+              },
+              "queryRef": "Regression Table.Test Regression",
+              "nativeQueryRef": "Test Regression"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Customer List"
+                    }
+                  },
+                  "Property": "Leather Bag Customers"
+                }
+              },
+              "queryRef": "Customer List.Leather Bag Customers",
+              "nativeQueryRef": "Leather Bag Customers"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Regression Table"
+                  }
+                },
+                "Property": "Regression Formula"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

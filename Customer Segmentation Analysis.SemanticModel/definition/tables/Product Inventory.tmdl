@@ -1,0 +1,81 @@
+table 'Product Inventory'
+	lineageTag: 9006c8d6-747d-413b-983d-c515329a7056
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: af478662-2dd9-4d8c-86bd-228080dae5b4
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Product_Name
+		dataType: string
+		lineageTag: 1faeffdf-010b-425c-9786-73f2b6e0c059
+		summarizeBy: none
+		sourceColumn: Product_Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Current Price'
+		dataType: int64
+		formatString: 0
+		lineageTag: ba4642ef-9e1f-4d02-b224-b35abff9d06f
+		summarizeBy: sum
+		sourceColumn: Current Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Number in Stock'
+		dataType: int64
+		formatString: 0
+		lineageTag: 7f449f55-223d-420a-a3ee-a584c80daee7
+		summarizeBy: sum
+		sourceColumn: Number in Stock
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Rating (stars)'
+		dataType: double
+		lineageTag: d654a929-1002-4be9-aedb-c0f2269cca59
+		summarizeBy: sum
+		sourceColumn: Customer Rating (stars)
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Return Rate'
+		dataType: double
+		lineageTag: 0072b87d-3107-4b7f-bbe7-6455d9380d4e
+		summarizeBy: sum
+		sourceColumn: Return Rate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Product Inventory' = m
+		mode: import
+		source =
+				let
+				  Source = Excel.Workbook(File.Contents("C:\Users\rakshitha.bn\Downloads\customer-list.xlsx"), null, true),
+				  #"Navigation 1" = Source{[Item = "Product Inventory", Kind = "Sheet"]}[Data],
+				  #"Changed column type" = Table.TransformColumnTypes(#"Navigation 1", {{"Column1", type text}}, "en-US"),
+				    #"Split Column by Delimiter" = Table.SplitColumn(#"Changed column type", "Column1", Splitter.SplitTextByEachDelimiter({" "}, QuoteStyle.None, false), {"Column1.1", "Column1.2"}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Split Column by Delimiter",{{"Column1.1", type text}, {"Column1.2", type text}}),
+				    #"Split Column by Delimiter1" = Table.SplitColumn(#"Changed Type", "Column1.2", Splitter.SplitTextByDelimiter(" ", QuoteStyle.None), {"Column1.2.1", "Column1.2.2", "Column1.2.3", "Column1.2.4", "Column1.2.5", "Column1.2.6", "Column1.2.7", "Column1.2.8", "Column1.2.9", "Column1.2.10", "Column1.2.11", "Column1.2.12", "Column1.2.13"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Split Column by Delimiter1",{{"Column1.2.1", type text}, {"Column1.2.2", type text}, {"Column1.2.3", type text}, {"Column1.2.4", type text}, {"Column1.2.5", type text}, {"Column1.2.6", type text}, {"Column1.2.7", type text}, {"Column1.2.8", type text}, {"Column1.2.9", type text}, {"Column1.2.10", type text}, {"Column1.2.11", type text}, {"Column1.2.12", type text}, {"Column1.2.13", type text}}),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Changed Type1", [PromoteAllScalars=true]),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Promoted Headers",{{"Product", type text}, {"ID", type text}, {"Product_1", type text}, {"Name", Int64.Type}, {"Current", Int64.Type}, {"Price", type number}, {"Number", type number}, {"in", type text}, {"Stock", type text}, {"Customer", type text}, {"Rating", type text}, {"(stars)", type text}, {"Return", type text}, {"Rate", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type2",{{"Product", "Product ID"}, {"ID", "Product_Name"}, {"Product_1", "m"}, {"Name", "Current Price"}}),
+				    #"Merged Columns" = Table.CombineColumns(#"Renamed Columns",{"Product_Name", "m"},Combiner.CombineTextByDelimiter(" ", QuoteStyle.None),"Product_Name.1"),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Merged Columns",{{"Product_Name.1", "Product_Name"}, {"Current Price", "Current Price"}, {"Current", "Number in Stock"}, {"Price", "Customer Rating (stars)"}, {"Number", "Return Rate"}}),
+				    #"Removed Other Columns" = Table.SelectColumns(#"Renamed Columns1",{"Product ID", "Product_Name", "Current Price", "Number in Stock", "Customer Rating (stars)", "Return Rate"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
